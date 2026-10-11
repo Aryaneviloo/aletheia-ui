@@ -18,6 +18,22 @@ const FAKE: Collection[] = [
   { id: 'c', name: 'Code Docs', docCount: 80, position: [1, 4, -8], color: '#4aa8ff' },
 ]
 
+function makeDotTexture() {
+  const size = 64
+  const canvas = document.createElement('canvas')
+  canvas.width = canvas.height = size
+  const ctx = canvas.getContext('2d')!
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2)
+  g.addColorStop(0, 'rgba(255,255,255,1)')
+  g.addColorStop(0.3, 'rgba(255,255,255,0.6)')
+  g.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = g
+  ctx.fillRect(0, 0, size, size)
+  return new THREE.CanvasTexture(canvas)
+}
+
+const DOT = makeDotTexture()
+
 function gaussian() {
   const u = 1 - Math.random()
   const v = Math.random()
@@ -60,7 +76,8 @@ function Nebula({ c }: { c: Collection }) {
           <bufferAttribute attach="attributes-color" args={[colors, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          size={0.07}
+          size={0.12}
+          map={DOT}
           vertexColors
           transparent
           depthWrite={false}
